@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  ::selection {
+    @apply bg-indigo-500/30 text-indigo-200;
+  }
+}
+
+/* 細捲軸（WebKit）＋ Firefox thin */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(51 65 85 / 0.5) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85 / 0.5);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgb(51 65 85 / 0.8);
+}
+
+/* 角色環境光：依 --ambient-glow 平滑變色（約 1s，需支援 @property 之瀏覽器） */
+@property --ambient-glow {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #64748b;
+}
+
+.ambient-glow-radial-tl {
+  position: absolute;
+  inset: 0;
+  pointer-events: none !important;
+  transition: --ambient-glow 1s ease-in-out;
+  background: radial-gradient(
+    ellipse 88% 62% at 14% 10%,
+    color-mix(in srgb, var(--ambient-glow) 20%, transparent) 0%,
+    transparent 58%
+  );
+}
+
+.ambient-glow-radial-br {
+  position: absolute;
+  inset: 0;
+  pointer-events: none !important;
+  transition: --ambient-glow 1s ease-in-out;
+  background: radial-gradient(
+    ellipse 88% 62% at 86% 90%,
+    color-mix(in srgb, var(--ambient-glow) 17%, transparent) 0%,
+    transparent 58%
+  );
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 背景浮動粒子（慢速、低對比，不干擾立繪） */
+.vspo-particle-drift {
+  animation-name: vspo-particle-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes vspo-particle-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--p-rot, 0deg));
+  }
+  25% {
+    transform: translate3d(18px, -24px, 0)
+      rotate(calc(var(--p-rot, 0deg) + 90deg));
+  }
+  50% {
+    transform: translate3d(-14px, 16px, 0)
+      rotate(calc(var(--p-rot, 0deg) + 180deg));
+  }
+  75% {
+    transform: translate3d(10px, 20px, 0)
+      rotate(calc(var(--p-rot, 0deg) + 270deg));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(calc(var(--p-rot, 0deg) + 360deg));
+  }
+}
+
+/* Minimal global reset */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.timeline-container {
+  width: 100%;
+  height: 4px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.timeline-progress {
+  height: 100%;
+  /* background-color 由 App 依 themeColor 動態設定 */
+  transition:
+    width 0.3s ease-in-out,
+    background-color 0.5s ease-in-out;
+}
+
+/* 立繪：中央柔和光暈（徑向全邊緣淡出）＋底部較強融入黑底 */
+.member-tachie-mask {
+  pointer-events: none !important;
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 86% 82% at 50% 44%,
+      black 52%,
+      rgba(0, 0, 0, 0.55) 72%,
+      transparent 88%
+    ),
+    linear-gradient(to top, transparent 0%, black 28%);
+  mask-image:
+    radial-gradient(
+      ellipse 86% 82% at 50% 44%,
+      black 52%,
+      rgba(0, 0, 0, 0.55) 72%,
+      transparent 88%
+    ),
+    linear-gradient(to top, transparent 0%, black 28%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}

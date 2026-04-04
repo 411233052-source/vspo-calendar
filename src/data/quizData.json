@@ -1,0 +1,352 @@
+[
+    {
+      "id": "q1",
+      "question_type": "quote",
+      "question": "「おいす～、どうもこんにちは、〇〇です」とよく挨拶するのは誰？",
+      "correct_member_id": "sumire",
+      "explanation": "花芽すみれお馴染みの挨拶！時々テンションが高すぎて声が裏返ることもあります。"
+    },
+    {
+      "id": "q2",
+      "question_type": "trivia",
+      "question": "「宇宙人（ぴぴーん星／ドロドロランド出身）」という設定があるメンバーは？",
+      "correct_member_id": "met",
+      "explanation": "小森めとは実は宇宙人！地球のゲームにハマって引きこもっています。"
+    },
+    {
+      "id": "q3",
+      "question_type": "quote",
+      "question": "「あたしはぶいすぽの清楚代表だから！」とよく自称するメンバーは？",
+      "correct_member_id": "hinano",
+      "explanation": "橘ひなのは「清楚代表」を自称しますが、豪快な笑い声と鋭いツッコミですぐにボロが出ます。"
+    },
+    {
+      "id": "q4",
+      "question_type": "trivia",
+      "question": "「ぶいすぽ風紀委員長」を名乗り、メンバーのセンシティブな言動を定期的にチェックしているのは？",
+      "correct_member_id": "sumire",
+      "explanation": "花芽すみれは「ぶいすぽ風紀委員長」として定期的に風紀チェック配信を行っています。"
+    },
+    {
+      "id": "q5",
+      "question_type": "quote",
+      "question": "一人称が「あーし」で、よく「えぐいてぇ！」と叫ぶギャルゲーマーといえば？",
+      "correct_member_id": "noa",
+      "explanation": "胡桃のあは特有のギャル語彙と、感情豊かなリアクションが特徴です。"
+    },
+    {
+      "id": "q6",
+      "question_type": "trivia",
+      "question": "「実家でパン屋を手伝っていた」という経歴を持ち、ファンマークも🥐（クロワッサン）なのは？",
+      "correct_member_id": "ema",
+      "explanation": "藍沢エマは大のパン好きで、よく配信でもパンの話をしています。"
+    },
+    {
+      "id": "q7",
+      "question_type": "quote",
+      "question": "「すーちゃん、それはちがうよ！」とよく姉に対して冷静なツッコミを入れるのは？",
+      "correct_member_id": "nazuna",
+      "explanation": "花芽なずなは、姉（すみれ）のボケや天然発言に対して、鋭く優しくツッコミを入れます。"
+    },
+    {
+      "id": "q8",
+      "question_type": "trivia",
+      "question": "漢検2級、普通自動車免許(MT)に加えて「剣道有段者」という意外なギャップを持つのは？",
+      "correct_member_id": "sumire",
+      "explanation": "花芽すみれはフワフワした見た目によらず、実は剣道有段者という武闘派な一面も。"
+    },
+    {
+      "id": "q9",
+      "question_type": "quote",
+      "question": "「にゃにゃにゃにゃにゃ！」と、焦った時によく猫語になってしまうのは？",
+      "correct_member_id": "tsuna",
+      "explanation": "猫汰つなは、本人は猫ではないと言い張りますが、パニックになると猫の鳴き声が出ます。"
+    },
+    {
+      "id": "q10",
+      "question_type": "trivia",
+      "question": "普段は気怠げだけど、FPSの戦闘になると「オラァ！」と勇ましい声を出すお姉さんといえば？",
+      "correct_member_id": "uruha",
+      "explanation": "一ノ瀬うるはは普段の眠そうな声と、戦闘中のバチバチなエイム＆言葉遣いのギャップが魅力です。"
+    },
+    {
+        "id": "q11",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "tsuna",
+        "explanation": "特徴的な猫耳（？）とアホ毛がポイント！猫汰つなです。"
+      },
+      {
+        "id": "q12",
+        "question_type": "silhouette",
+        "question": "この色の特徴…一体誰？",
+        "correct_member_id": "hinano",
+        "explanation": "大きなツインテールといえば、橘ひなの！"
+      },
+      {
+        "id": "q13",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "toto",
+        "explanation": "ふわふわのショートヘアとベレー帽！小雀ととです。"
+      },
+      {
+        "id": "q14",
+        "question_type": "fan_mark",
+        "question": "ファンマークが「🍣」（お寿司）のメンバーは？",
+        "correct_member_id": "tsuna",
+        "explanation": "猫汰つなはお寿司が大好き！"
+      },
+      {
+        "id": "q15",
+        "question_type": "fan_mark",
+        "question": "ファンマークが「🪐」（土星/惑星）のメンバーは？",
+        "correct_member_id": "met",
+        "explanation": "小森めとはドロドロランドから来た宇宙人だからです。"
+      },
+      {
+        "id": "q16",
+        "question_type": "fan_mark",
+        "question": "ファンマークが「🍒」（さくらんぼ）のメンバーは？",
+        "correct_member_id": "sena",
+        "explanation": "空澄セナのファンマークは可愛いさくらんぼ！"
+      },
+      {
+        "id": "q17",
+        "question_type": "unit",
+        "question": "次のうち、「Iris Black Games (IBG)」に所属しているのは？",
+        "correct_member_id": "ren",
+        "explanation": "如月れんは、胡桃のあ、橘ひなのと共にIBGのメンバーです。"
+      },
+      {
+        "id": "q18",
+        "question_type": "unit",
+        "question": "次のうち、「Cattleya Regina Games (CRG)」に所属しているのは？",
+        "correct_member_id": "lisa",
+        "explanation": "英リサは、兎咲ミミ、空澄セナと共にCRGのメンバーです。"
+      },
+      {
+        "id": "q19",
+        "question_type": "trivia",
+        "question": "大食い・料理上手で知られ、冷蔵庫に常に大量のストックがあるメンバーは？",
+        "correct_member_id": "lisa",
+        "explanation": "英リサは料理配信も大人気で、食べる量も桁違いです。"
+      },
+      {
+        "id": "q20",
+        "question_type": "trivia",
+        "question": "メンバーの中で一番身長が高い（165cm以上）のは？",
+        "correct_member_id": "qpi",
+        "explanation": "神成きゅぴは身長168cmで、ぶいすぽっ！メンバーの中で一番の高身長です。"
+      },
+      {
+        "id": "q21",
+        "question_type": "trivia",
+        "question": "ホラーゲームが極端に苦手で、プレイ中に泣き叫んでしまうことが多いのは？",
+        "correct_member_id": "nazuna",
+        "explanation": "花芽なずなはホラゲーが大の苦手。姉のすみれに助けを求めることも。"
+      },
+      {
+        "id": "q22",
+        "question_type": "quote",
+        "question": "「てめえら、全員ぶっ○す！」など、清楚な見た目からは想像できないトキシックな発言をたまにするのは？",
+        "correct_member_id": "beni",
+        "explanation": "八雲べにはゲームへの熱中ゆえに、たまに治安の悪い口調が飛び出します。"
+      },
+      {
+        "id": "q23",
+        "question_type": "trivia",
+        "question": "「ボクっ娘」で、メイド服を着ているVSPOメンバーといえば？",
+        "correct_member_id": "kuromu",
+        "explanation": "夜乃くろむはボクっ娘メイドという属性てんこ盛りのキャラクターです。"
+      },
+      {
+        "id": "q24",
+        "question_type": "trivia",
+        "question": "Minecraftの建築センスがプロ並みで、「ぶいすぽ鯖のゼネコン」と呼ばれることもあるのは？",
+        "correct_member_id": "toto",
+        "explanation": "小雀ととのマイクラ建築は非常に美しく、他メンバーからも建築依頼が絶えません。"
+      },
+      {
+        "id": "q25",
+        "question_type": "quote",
+        "question": "「まじで感謝～！」と、明るくギャルっぽい感謝の言葉をよく使うのは？",
+        "correct_member_id": "qpi",
+        "explanation": "神成きゅぴの明るいギャルテンションを象徴する言葉です。"
+      },
+      {
+        "id": "q26",
+        "question_type": "trivia",
+        "question": "「おにぎりを三角に握れる」という可愛らしい特技を持っているメンバーは？",
+        "correct_member_id": "sumire",
+        "explanation": "花芽すみれの公式プロフィールの特技欄には、なぜか「おにぎりを三角に握れる」と書かれています。"
+      },
+      {
+        "id": "q27",
+        "question_type": "trivia",
+        "question": "お酒が大好きで、よく晩酌しながら配信をしている「飲酒スイマー」といえば？",
+        "correct_member_id": "ren",
+        "explanation": "如月れんはお酒（特にビールやハイボール）が大好きで、ほろ酔い配信も人気です。"
+      },
+      {
+        "id": "q28",
+        "question_type": "trivia",
+        "question": "圧倒的な歌唱力を誇り、ぶいすぽっ！の「歌姫」として多くの歌ってみた動画を出しているのは？",
+        "correct_member_id": "hinano",
+        "explanation": "橘ひなのはFPSの腕前だけでなく、その力強く美しい歌声でも多くのファンを魅了しています。"
+      },
+      {
+        "id": "q29",
+        "question_type": "fan_mark",
+        "question": "ファンマークが「🦇🕷」（コウモリとクモ）の、ボクっ娘メイドは？",
+        "correct_member_id": "kuromu",
+        "explanation": "夜乃くろむはダークで可愛い属性が詰まったゲーミングメイドです。"
+      },
+      {
+        "id": "q30",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "akari",
+        "explanation": "ピンク色の髪とふんわりした雰囲気！「あかりん星」から来た夢野あかりです。"
+      },
+      {
+        "id": "q31",
+        "question_type": "silhouette",
+        "question": "この色の特徴…一体誰？",
+        "correct_member_id": "ema",
+        "explanation": "金髪と水色の爽やかなカラーリングといえば、藍沢エマ！"
+      },
+      {
+        "id": "q32",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "beni",
+        "explanation": "特徴的な緑色の髪！お洒落番長の八雲べにです。"
+      },
+      {
+        "id": "q33",
+        "question_type": "unit",
+        "question": "次のうち、「Lupinus Virtual Games (LVG)」に所属しているのは？",
+        "correct_member_id": "uruha",
+        "explanation": "一ノ瀬うるはは、花芽姉妹、小雀ととと共に初期ユニットLVGのメンバーです。"
+      },
+      {
+        "id": "q34",
+        "question_type": "unit",
+        "question": "次のうち、「Cattleya Regina Games (CRG)」に所属しているのは？",
+        "correct_member_id": "mimi",
+        "explanation": "兎咲ミミは、英リサ、空澄セナと共にCRGのメンバーです。"
+      },
+      {
+        "id": "q35",
+        "question_type": "trivia",
+        "question": "学生時代、ソフトボール部だったのに学校の代表として陸上部と一緒にマラソン大会を走らされたエピソードを持つのは？",
+        "correct_member_id": "sumire",
+        "explanation": "花芽すみれは昔、運動神経が非常に良かったという伝説エピソードを持っています。"
+      },
+      {
+        "id": "q36",
+        "question_type": "trivia",
+        "question": "「ドロドロランド」出身の宇宙人が小森めとですが、「あかりん星」からやって来たメンバーは誰？",
+        "correct_member_id": "akari",
+        "explanation": "夢野あかりは独自の世界観「あかりん星」の出身（？）です。"
+      },
+      {
+        "id": "q37",
+        "question_type": "quote",
+        "question": "「ナイスゥー！」など、テンションが上がった時の超高音が「鼓膜破壊」と愛を込めて呼ばれるのは？",
+        "correct_member_id": "mimi",
+        "explanation": "兎咲ミミの歓声は非常に高く可愛らしいですが、イヤホン勢には注意が必要です。"
+      },
+      {
+        "id": "q38",
+        "question_type": "trivia",
+        "question": "紫色の髪と、マイペースで可愛らしい声が特徴的なVSPO! JPメンバーは？",
+        "correct_member_id": "runa",
+        "explanation": "紫宮るなは、その可愛らしい声とFPSでの鋭い立ち回りのギャップが人気です。"
+      },
+      {
+        "id": "q39",
+        "question_type": "trivia",
+        "question": "料理がとても上手で、他のメンバーを家に招いて手料理を振る舞い「ママ」と呼ばれることもあるのは？",
+        "correct_member_id": "lisa",
+        "explanation": "英リサの包容力と料理スキルは、ぶいすぽっ！メンバーの胃袋を支えています。"
+      },
+      {
+        "id": "q40",
+        "question_type": "unit",
+        "question": "次のうち、英語圏向けグループ「VSPO! EN」に所属しているメンバーは？",
+        "correct_member_id": "jira",
+        "explanation": "地崎ジラ（Jira Jisaki）はVSPO! ENのメンバーです。"
+      },
+      {
+        "id": "q41",
+        "question_type": "trivia",
+        "question": "2026年1月に、龍巻ちせと共にVSPO! JPからデビューしたメンバーは？",
+        "correct_member_id": "saine",
+        "explanation": "銀城サイネは、龍巻ちせと同期として2026年にデビューしました。"
+      },
+      {
+        "id": "q42",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "moka",
+        "explanation": "可愛らしいピンクとフリルの衣装！甘結もかです。"
+      },
+      {
+        "id": "q43",
+        "question_type": "silhouette",
+        "question": "この色の特徴…一体誰？",
+        "correct_member_id": "hanabi",
+        "explanation": "情熱的な赤とオレンジのカラーリング！蝶屋はなびです。"
+      },
+      {
+        "id": "q44",
+        "question_type": "fan_mark",
+        "question": "ファンマークが「🌙✨」（三日月とキラキラ）など、夜空を連想させるVSPO! ENのメンバーは？",
+        "correct_member_id": "remia",
+        "explanation": "青月レミア（Remia Aotsuki）はその名の通り、美しく青い月のようなモチーフを持っています。"
+      },
+      {
+        "id": "q45",
+        "question_type": "trivia",
+        "question": "黒と赤のクールなデザインで、名前に「刃」が入っているVSPO! ENのメンバーは？",
+        "correct_member_id": "arya",
+        "explanation": "黒刃アリア（Arya Kuroha）は、鋭くかっこいいビジュアルが特徴です。"
+      },
+      {
+        "id": "q46",
+        "question_type": "quote",
+        "question": "いつも元気いっぱいで、配信の挨拶に「おはよー！」とよく言うものの、実は極度の朝弱なのは？",
+        "correct_member_id": "uruha",
+        "explanation": "一ノ瀬うるはの配信は夕方～夜が多いですが、起きたての時はよく「おはよー」と言います。"
+      },
+      {
+        "id": "q47",
+        "question_type": "trivia",
+        "question": "マスコットキャラクター「ぽやねこ」を飼っている（？）のは誰？",
+        "correct_member_id": "sumire",
+        "explanation": "ぽやねこは花芽すみれの配信やグッズによく登場する謎の生き物です。"
+      },
+      {
+        "id": "q48",
+        "question_type": "trivia",
+        "question": "デビュー配信で緊張のあまり、用意していた原稿をマッハのスピードで読み終えてしまった伝説を持つのは？",
+        "correct_member_id": "tsuna",
+        "explanation": "猫汰つなの初配信は、あまりの緊張と早口で予定時間を大幅に残して終わってしまい、語り草になっています。"
+      },
+      {
+        "id": "q49",
+        "question_type": "silhouette",
+        "question": "このぼやけた画像は誰？",
+        "correct_member_id": "runa",
+        "explanation": "淡い紫色と可愛らしいツインテール！紫宮るなです。"
+      },
+      {
+        "id": "q50",
+        "question_type": "trivia",
+        "question": "ぶいすぽっ！のギャル枠といえば胡桃のあと、もう一人金髪が似合う陽キャギャルといえば？",
+        "correct_member_id": "qpi",
+        "explanation": "神成きゅぴは明るい性格と高い身長で、ぶいすぽの頼れる陽キャお姉さんとして活躍しています。"
+      }
+  ]
