@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import streamsData from '../data/vspo_streams.json'
 import {
@@ -14,6 +14,8 @@ function streamArchiveDate(ymd: string): Date {
 }
 import type { UiLang } from '../utils/i18n'
 import { getMemberName, interpolate, t } from '../utils/i18n'
+import { EventActionModal } from './EventActionModal'
+import { getEventVisualMeta } from '../utils/eventVisuals'
 
 type StreamRecord = {
   member_id: string
@@ -37,6 +39,12 @@ type GroupedYearEvents = {
   events: ArchiveEvent[]
 }
 
+type GroupedMonthEvents = {
+  key: string
+  monthLabel: string
+  events: ArchiveEvent[]
+}
+
 type ArchiveEvent = VspoEvent & {
   uid: string
   stream: StreamRecord
@@ -49,6 +57,10 @@ function formatDate(date: Date): string {
   return `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`
 }
 
+function formatMonthLabel(date: Date): string {
+  return `${date.getMonth() + 1}月`
+}
+
 function normalizeSecureThumbUrl(url: string): string {
   return url.trim().replace(/^http:\/\//i, 'https://')
 }
@@ -57,6 +69,17 @@ function resolveStreamThumbnailUrl(stream: StreamRecord): string {
   const custom = stream.live_thumbnail?.trim()
   if (custom) return normalizeSecureThumbUrl(custom)
   return `https://img.youtube.com/vi/${stream.video_id}/mqdefault.jpg`
+}
+
+/**
+ * Normalize member IDs between sources.
+ * `vspo_members.json` and `vspo_streams.json` currently contain a few legacy mismatches.
+ */
+function normalizeMemberIdForCompare(rawId: string): string {
+  const id = rawId.trim().toLowerCase()
+  if (id === 'met') return 'meto'
+  if (id === 'yuuhi') return 'yuhi'
+  return id
 }
 
 export function LeftSidebar({
@@ -69,14 +92,21 @@ export function LeftSidebar({
     getJSTWallClockParts(getJSTNow()).year,
   ])
   const [featuredEvent, setFeaturedEvent] = useState<ArchiveEvent | null>(null)
+  const [actionEvent, setActionEvent] = useState<ArchiveEvent | null>(null)
   const currentMember = currentEvent.member
+  const selectedMemberId = currentMember.id
+  const normalizedSelectedMemberId = normalizeMemberIdForCompare(selectedMemberId)
   const tr = (key: string) => t(uiLang, key)
   const memberLabel = getMemberName(currentMember, uiLang)
 
   const archiveEvents = useMemo<ArchiveEvent[]>(() => {
     const nowInstant = getJSTNow()
     return (streamsData as StreamRecord[])
-      .filter((stream) => stream.member_id === currentMember.id)
+      .filter(
+        (stream) =>
+          normalizeMemberIdForCompare(stream.member_id) ===
+          normalizedSelectedMemberId,
+      )
       .filter((stream) => Boolean(stream.video_id))
       .filter((stream) => {
         const date = streamArchiveDate(stream.date)
@@ -86,14 +116,26 @@ export function LeftSidebar({
         type: stream.type,
         date: streamArchiveDate(stream.date),
         member: currentMember,
-        memberId: currentMember.id,
+        memberId: selectedMemberId,
         uid: `stream|${stream.member_id}|${stream.type}|${stream.date}|${stream.video_id}`,
         stream,
       }))
       .sort(
       (a, b) => b.date.getTime() - a.date.getTime(),
     )
-  }, [currentMember])
+  }, [currentMember, normalizedSelectedMemberId, selectedMemberId])
+
+  useEffect(() => {
+    const matchedStreams = (streamsData as StreamRecord[]).filter(
+      (stream) =>
+        normalizeMemberIdForCompare(stream.member_id) ===
+        normalizedSelectedMemberId,
+    ).length
+    console.log('[LeftSidebar] selected member id:', selectedMemberId, {
+      normalizedSelectedMemberId,
+      matchedStreams,
+    })
+  }, [normalizedSelectedMemberId, selectedMemberId])
 
   const filteredEvents = useMemo(() => {
     if (currentEvent.type === 'anniversary') {
@@ -140,6 +182,22 @@ export function LeftSidebar({
     )
   }
 
+  const groupedByMonth = (events: ArchiveEvent[]): GroupedMonthEvents[] => {
+    const monthMap = new Map<string, ArchiveEvent[]>()
+    events.forEach((event) => {
+      const key = `${event.date.getFullYear()}-${String(
+        event.date.getMonth() + 1,
+      ).padStart(2, '0')}`
+      if (!monthMap.has(key)) monthMap.set(key, [])
+      monthMap.get(key)!.push(event)
+    })
+    return Array.from(monthMap.entries()).map(([key, monthEvents]) => ({
+      key,
+      monthLabel: formatMonthLabel(monthEvents[0].date),
+      events: monthEvents,
+    }))
+  }
+
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -179,10 +237,7 @@ export function LeftSidebar({
                       type="button"
                       onClick={() => {
                         onPlayClickSound()
-                        window.open(
-                          `https://www.youtube.com/watch?v=${resolvedFeaturedEvent.stream.video_id}`,
-                          '_blank',
-                        )
+                        setActionEvent(resolvedFeaturedEvent)
                       }}
                       className="w-full text-left group"
                     >
@@ -209,8 +264,12 @@ export function LeftSidebar({
                         </div>
                       </div>
                       <div className="p-3">
-                        <h3 className="text-sm text-slate-100 font-semibold line-clamp-2">
-                          {resolvedFeaturedEvent.stream.title}
+                        <h3
+                          className="text-sm text-slate-100 font-semibold line-clamp-2"
+                          title={resolvedFeaturedEvent.stream.title}
+                        >
+                          {getMemberName(resolvedFeaturedEvent.member, uiLang)}{' '}
+                          {getEventVisualMeta(resolvedFeaturedEvent.type).shortLabel}
                         </h3>
                         <p className="text-xs text-slate-400 mt-1">
                           {formatDate(resolvedFeaturedEvent.date)}
@@ -246,46 +305,62 @@ export function LeftSidebar({
                       </button>
 
                       {isExpanded && (
-                        <div className="divide-y divide-slate-800/80">
-                          {group.events.map((event) => {
-                            const isActive =
-                              resolvedFeaturedEvent?.uid === event.uid
-                            return (
-                              <button
-                                key={event.uid}
-                                type="button"
-                                onClick={() => {
-                                  onPlayClickSound()
-                                  setFeaturedEvent(event)
-                                }}
-                                className={`group w-full text-left flex gap-3 p-2 hover:bg-slate-800/80 cursor-pointer transition-colors ${
-                                  isActive
-                                    ? 'bg-cyan-500/10 ring-1 ring-cyan-400/50'
-                                    : ''
-                                }`}
-                              >
-                                <div className="relative aspect-video w-28 shrink-0 overflow-hidden rounded-md">
-                                  <img
-                                    src={resolveStreamThumbnailUrl(
-                                      event.stream,
-                                    )}
-                                    alt=""
-                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    referrerPolicy="no-referrer"
-                                  />
-                                  <div className="pointer-events-none absolute inset-0 bg-black/20" />
-                                </div>
-                                <div className="min-w-0 flex flex-col justify-between py-0.5">
-                                  <p className="text-xs line-clamp-2 text-slate-200">
-                                    {event.stream.title}
-                                  </p>
-                                  <p className="text-[10px] text-slate-400">
-                                    {formatDate(event.date)}
-                                  </p>
-                                </div>
-                              </button>
-                            )
-                          })}
+                        <div className="space-y-3 p-2">
+                          {groupedByMonth(group.events).map((monthGroup) => (
+                            <div key={monthGroup.key} className="space-y-1.5">
+                              <h4 className="px-2 pt-1 text-xs font-bold tracking-wide text-slate-300/90">
+                                {monthGroup.monthLabel}
+                              </h4>
+                              {monthGroup.events.map((event) => {
+                                const isActive =
+                                  resolvedFeaturedEvent?.uid === event.uid
+                                const visual = getEventVisualMeta(event.type)
+                                return (
+                                  <button
+                                    key={event.uid}
+                                    type="button"
+                                    onClick={() => {
+                                      onPlayClickSound()
+                                      setFeaturedEvent(event)
+                                      setActionEvent(event)
+                                    }}
+                                    className={`group w-full text-left flex gap-3 rounded-lg p-2.5 hover:bg-slate-800/80 cursor-pointer transition-colors ${
+                                      isActive
+                                        ? 'bg-cyan-500/10 ring-1 ring-cyan-400/50'
+                                        : 'bg-slate-900/40'
+                                    }`}
+                                  >
+                                    <div className="relative aspect-video w-28 shrink-0 overflow-hidden rounded-md">
+                                      <img
+                                        src={resolveStreamThumbnailUrl(
+                                          event.stream,
+                                        )}
+                                        alt=""
+                                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                        referrerPolicy="no-referrer"
+                                      />
+                                      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+                                    </div>
+                                    <div className="min-w-0 flex flex-col justify-between py-0.5">
+                                      <p className={`inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${visual.softBgClass} ${visual.softTextClass}`}>
+                                        <span>{visual.icon}</span>
+                                        <span>{visual.shortLabel}</span>
+                                      </p>
+                                      <p
+                                        className="mt-1 text-xs line-clamp-1 text-slate-100"
+                                        title={event.stream.title}
+                                      >
+                                        {getMemberName(event.member, uiLang)} {visual.shortLabel}
+                                      </p>
+                                      <p className="text-[10px] text-slate-400">
+                                        {formatDate(event.date)}
+                                      </p>
+                                    </div>
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -303,6 +378,15 @@ export function LeftSidebar({
           </div>
         </motion.aside>
       ) : null}
+      <EventActionModal
+        isOpen={actionEvent !== null}
+        onClose={() => setActionEvent(null)}
+        icon={actionEvent ? getEventVisualMeta(actionEvent.type).icon : '📌'}
+        typeLabel={actionEvent ? getEventVisualMeta(actionEvent.type).shortLabel : '活動'}
+        imageUrl={actionEvent?.member.image_url}
+        title={actionEvent?.stream.title ?? ''}
+        dateLabel={actionEvent ? formatDate(actionEvent.date) : ''}
+      />
     </AnimatePresence>
   )
 }

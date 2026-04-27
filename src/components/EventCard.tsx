@@ -2,11 +2,15 @@ import { memo, useCallback, useState } from 'react'
 import type { VspoEvent } from '../utils/dateUtils'
 import {
   formatEventListDate,
-  formatEventTitle,
   getMemberName,
-  t,
   type UiLang,
 } from '../utils/i18n'
+import { EventActionModal } from './EventActionModal'
+import {
+  buildEventModalDateLabel,
+  buildEventTitlePair,
+  getEventVisualMeta,
+} from '../utils/eventVisuals'
 
 export type EventCardProps = {
   event: VspoEvent
@@ -80,76 +84,78 @@ function EventCardInner({
   uiLang,
   domId,
 }: EventCardProps) {
-  const { member, date, type, years } = event
-  const isAnniversary = type === 'anniversary'
-  const isDebut = type === 'debut'
+  const { member, date, type } = event
   const theme = member.themeColor
   const memberLabel = getMemberName(member, uiLang)
-  const tr = (key: string) => t(uiLang, key)
+  const [isActionModalOpen, setIsActionModalOpen] = useState(false)
+  const visual = getEventVisualMeta(type)
+  const { shortTitle, fullTitle } = buildEventTitlePair(event, uiLang)
 
   const handleClick = useCallback(() => {
     onSelect(event)
+    setIsActionModalOpen(true)
   }, [onSelect, event])
 
   return (
-    <button
-      type="button"
-      id={domId}
-      onClick={handleClick}
-      className={`group relative flex w-full overflow-hidden rounded-lg border border-white/10 bg-white/5 text-left transform-gpu transition-transform transition-colors transition-shadow duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-black/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500/80 active:scale-95 ${
-        isCurrent
-          ? 'ring-2 shadow-[0_0_15px_rgba(34,211,238,0.45)]'
-          : ''
-      }`}
-      style={
-        isCurrent
-          ? ({ '--tw-ring-color': theme } as { [k: string]: string })
-          : undefined
-      }
-    >
-      <span
-        className="w-1 shrink-0 self-stretch"
-        style={{ backgroundColor: theme }}
-        aria-hidden
-      />
-      <div className="flex min-w-0 flex-1 flex-col p-4">
-        <div className="text-sm font-bold text-center text-white/95 line-clamp-2">
-          {isAnniversary ? (
-            <>
-              🎉{' '}
-              {formatEventTitle(memberLabel, 'anniversary', uiLang, {
-                anniversaryYears: years ?? 0,
-              })}
-            </>
-          ) : isDebut ? (
-            <>
-              ✨ {memberLabel} {tr('eventCard.debut')}
-            </>
-          ) : (
-            <>
-              🎂{' '}
-              {formatEventTitle(memberLabel, 'birthday', uiLang)}
-            </>
-          )}
-        </div>
-        <div className="border-b border-slate-700 my-2" />
-        <div className="flex items-center justify-between">
+    <>
+      <button
+        type="button"
+        id={domId}
+        onClick={handleClick}
+        className={`group relative flex w-full overflow-hidden rounded-lg border border-white/10 bg-white/5 text-left transform-gpu transition-transform transition-colors transition-shadow duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-black/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500/80 active:scale-95 ${
+          isCurrent
+            ? 'ring-2 shadow-[0_0_15px_rgba(34,211,238,0.45)]'
+            : ''
+        }`}
+        style={
+          isCurrent
+            ? ({ '--tw-ring-color': theme } as { [k: string]: string })
+            : undefined
+        }
+      >
+        <span
+          className="w-1 shrink-0 self-stretch"
+          style={{ backgroundColor: theme }}
+          aria-hidden
+        />
+        <div className="flex min-w-0 flex-1 flex-col p-4">
           <div
-            className="text-xs font-semibold"
-            style={{ color: theme }}
+            className={`inline-flex w-fit items-center gap-1 rounded-full px-2 py-1 text-[11px] font-semibold ${visual.softBgClass} ${visual.softTextClass}`}
           >
-            {formatEventListDate(date, uiLang)}
+            <span>{visual.icon}</span>
+            <span>{visual.shortLabel}</span>
           </div>
-          <div className="w-8 h-8">
-            <EventCardAvatar
-              imageUrl={member.image_url}
-              themeColor={theme}
-              displayName={memberLabel}
-            />
+          <div className="mt-2 text-sm font-bold text-center text-white/95 line-clamp-2" title={fullTitle}>
+            {shortTitle}
+          </div>
+          <div className="border-b border-slate-700 my-2" />
+          <div className="flex items-center justify-between">
+            <div
+              className="text-xs font-semibold"
+              style={{ color: theme }}
+            >
+              {formatEventListDate(date, uiLang)}
+            </div>
+            <div className="w-8 h-8">
+              <EventCardAvatar
+                imageUrl={member.image_url}
+                themeColor={theme}
+                displayName={memberLabel}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </button>
+      </button>
+      <EventActionModal
+        isOpen={isActionModalOpen}
+        onClose={() => setIsActionModalOpen(false)}
+        icon={visual.icon}
+        typeLabel={visual.shortLabel}
+        imageUrl={member.image_url}
+        title={fullTitle}
+        dateLabel={buildEventModalDateLabel(event, uiLang)}
+      />
+    </>
   )
 }
 

@@ -216,7 +216,7 @@ function EventModalInner({
             />
           </div>
 
-          <div className="relative z-0 isolate min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+          <div className="relative z-0 isolate min-h-0 flex-1 overflow-y-auto p-5 md:p-7">
             {filteredEvents.length === 0 ? (
               <p className="py-12 text-center text-sm text-white/50">
                 {tr('eventModal.empty')}
@@ -228,7 +228,7 @@ function EventModalInner({
                     <h3 className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-center py-1 rounded-t-md text-xs font-semibold uppercase tracking-[0.2em]">
                       {group.label}
                     </h3>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
                       {group.events.map((event) => {
                         const eventKey = getEventModalCardKey(event)
                         const isCurrent = eventKey === currentEventKey

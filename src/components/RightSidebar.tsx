@@ -16,6 +16,12 @@ import {
   interpolate,
   t,
 } from '../utils/i18n'
+import { EventActionModal } from './EventActionModal'
+import {
+  buildEventModalDateLabel,
+  buildEventTitlePair,
+  getEventVisualMeta,
+} from '../utils/eventVisuals'
 
 type RightSidebarProps = {
   isOpen: boolean
@@ -48,18 +54,21 @@ function EventAvatarButton({
   event,
   uiLang,
   onSelectEvent,
+  onPreviewEvent,
   sizeClass,
 }: {
   event: VspoEvent
   uiLang: UiLang
   onSelectEvent: (e: VspoEvent) => void
+  onPreviewEvent: (e: VspoEvent) => void
   sizeClass: string
 }) {
   const { member, type } = event
   const hasImage = member.image_url && member.image_url.trim() !== ''
   const displayName = getMemberName(member, uiLang)
-  const firstChar = displayName.charAt(0)
   const isAnniversary = type === 'anniversary'
+  const visual = getEventVisualMeta(type)
+  const { fullTitle } = buildEventTitlePair(event, uiLang)
 
   return (
     <button
@@ -67,7 +76,9 @@ function EventAvatarButton({
       onClick={(e) => {
         e.stopPropagation()
         onSelectEvent(event)
+        onPreviewEvent(event)
       }}
+      title={fullTitle}
       className={`${sizeClass} flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-900 text-[10px] font-semibold shadow transition-all duration-150 hover:scale-110 hover:brightness-110 ${
         isAnniversary ? 'ring-1 ring-yellow-400/50' : ''
       }`}
@@ -84,7 +95,7 @@ function EventAvatarButton({
           referrerPolicy="no-referrer"
         />
       ) : (
-        firstChar
+        visual.icon
       )}
     </button>
   )
@@ -133,6 +144,7 @@ export function RightSidebar({
     return jstMidnight(p.year, p.monthIndex, 1)
   })
   const [viewMode, setViewMode] = useState<ViewMode>('month')
+  const [previewEvent, setPreviewEvent] = useState<VspoEvent | null>(null)
 
   const { year, monthIndex: month } = getJSTWallClockParts(currentDate)
 
@@ -273,7 +285,8 @@ export function RightSidebar({
   if (!isOpen) return null
 
   return (
-    <aside className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-slate-900/95 backdrop-blur-sm">
+    <>
+      <aside className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-slate-900/95 backdrop-blur-sm">
       <div className="flex h-full min-h-0 flex-col overflow-hidden px-4 pb-4 pt-4 sm:px-5">
         <div className="mb-3 grid shrink-0 grid-cols-[1fr_auto] items-center gap-2">
           <div className="flex min-w-0 items-center justify-center gap-2">
@@ -391,13 +404,17 @@ export function RightSidebar({
                       role={hasEvents ? 'button' : undefined}
                       tabIndex={hasEvents ? 0 : undefined}
                       onClick={() => {
-                        if (evs.length > 0) onSelectEvent(evs[0]!)
+                        if (evs.length > 0) {
+                          onSelectEvent(evs[0]!)
+                          setPreviewEvent(evs[0]!)
+                        }
                       }}
                       onKeyDown={(e) => {
                         if (!hasEvents) return
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault()
                           onSelectEvent(evs[0]!)
+                          setPreviewEvent(evs[0]!)
                         }
                       }}
                       className={`group relative min-h-0 min-w-0 rounded-md border border-slate-700/50 shadow-sm outline-none transition-colors duration-200 hover:bg-slate-800/90 hover:border-cyan-500 ${
@@ -435,6 +452,7 @@ export function RightSidebar({
                                   event={evs[0]!}
                                   uiLang={uiLang}
                                   onSelectEvent={onSelectEvent}
+                                  onPreviewEvent={setPreviewEvent}
                                   sizeClass="h-8 w-8"
                                 />
                               </div>
@@ -448,6 +466,7 @@ export function RightSidebar({
                                     event={event}
                                     uiLang={uiLang}
                                     onSelectEvent={onSelectEvent}
+                                    onPreviewEvent={setPreviewEvent}
                                     sizeClass="h-8 w-8"
                                   />
                                 ))}
@@ -461,6 +480,7 @@ export function RightSidebar({
                                     event={evs[0]!}
                                     uiLang={uiLang}
                                     onSelectEvent={onSelectEvent}
+                                    onPreviewEvent={setPreviewEvent}
                                     sizeClass="h-8 w-8"
                                   />
                                 </div>
@@ -483,6 +503,7 @@ export function RightSidebar({
                                         event={event}
                                         uiLang={uiLang}
                                         onSelectEvent={onSelectEvent}
+                                        onPreviewEvent={setPreviewEvent}
                                         sizeClass="h-7 w-7"
                                       />
                                     ))}
@@ -493,11 +514,20 @@ export function RightSidebar({
                           </div>
                           {typeLabel ? (
                             <div
-                              className={`mt-auto w-full truncate pb-0.5 text-center text-[10px] text-slate-400 pointer-events-none ${
+                              className={`mt-auto w-full truncate rounded-full px-1 pb-0.5 pt-0.5 text-center text-[10px] pointer-events-none ${
                                 hasManyEvents ? 'pr-8' : ''
                               }`}
+                              title={typeLabel}
                             >
-                              {typeLabel}
+                              <span
+                                className={`inline-flex rounded-full px-2 py-0.5 ${
+                                  getEventVisualMeta(evs[0]?.type ?? '').softBgClass
+                                } ${
+                                  getEventVisualMeta(evs[0]?.type ?? '').softTextClass
+                                }`}
+                              >
+                                {typeLabel}
+                              </span>
                             </div>
                           ) : null}
                         </div>
@@ -584,6 +614,16 @@ export function RightSidebar({
           </div>
         )}
       </div>
-    </aside>
+      </aside>
+      <EventActionModal
+        isOpen={previewEvent !== null}
+        onClose={() => setPreviewEvent(null)}
+        icon={previewEvent ? getEventVisualMeta(previewEvent.type).icon : '📌'}
+        typeLabel={previewEvent ? getEventVisualMeta(previewEvent.type).shortLabel : '活動'}
+        imageUrl={previewEvent?.member.image_url}
+        title={previewEvent ? buildEventTitlePair(previewEvent, uiLang).fullTitle : ''}
+        dateLabel={previewEvent ? buildEventModalDateLabel(previewEvent, uiLang) : ''}
+      />
+    </>
   )
 }
