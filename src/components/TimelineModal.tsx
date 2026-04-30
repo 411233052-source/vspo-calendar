@@ -70,6 +70,7 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
   const tr = (key: string) => t(uiLang, key)
   const timeline = getDebutTimeline()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const hoverHideTimerRef = useRef<number | null>(null)
   const [hoveredMember, setHoveredMember] = useState<string | null>(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
   const timelineYears = useMemo(
@@ -114,6 +115,30 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
     return map
   }, [timeline])
 
+  function clearHoverHideTimer() {
+    if (hoverHideTimerRef.current !== null) {
+      window.clearTimeout(hoverHideTimerRef.current)
+      hoverHideTimerRef.current = null
+    }
+  }
+
+  function showMemberTooltip(memberId: string, rect: DOMRect) {
+    clearHoverHideTimer()
+    setTooltipPos({
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    })
+    setHoveredMember(memberId)
+  }
+
+  function queueHideMemberTooltip() {
+    clearHoverHideTimer()
+    hoverHideTimerRef.current = window.setTimeout(() => {
+      setHoveredMember(null)
+      hoverHideTimerRef.current = null
+    }, 180)
+  }
+
   function handleScroll() {
     const container = scrollContainerRef.current
     if (!container) return
@@ -142,6 +167,13 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
     handleScroll()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineYears])
+
+  useEffect(
+    () => () => {
+      clearHoverHideTimer()
+    },
+    [],
+  )
 
   return (
     <AnimatePresence>
@@ -272,14 +304,12 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
                                 key={member.id}
                                 className="group relative flex flex-col items-center justify-center p-2 text-center bg-slate-800/20 hover:bg-cyan-900/10 rounded-lg border border-slate-700/50 hover:border-cyan-700/50 transition-all cursor-pointer last:odd:col-span-2 last:odd:w-[60%] last:odd:mx-auto [&:last-child:nth-child(odd)]:col-span-2 [&:last-child:nth-child(odd)]:w-[60%] [&:last-child:nth-child(odd)]:mx-auto"
                                 onMouseEnter={(e) => {
-                                  const rect = e.currentTarget.getBoundingClientRect()
-                                  setTooltipPos({
-                                    x: rect.left + rect.width / 2,
-                                    y: rect.top,
-                                  })
-                                  setHoveredMember(member.id)
+                                  showMemberTooltip(
+                                    member.id,
+                                    e.currentTarget.getBoundingClientRect(),
+                                  )
                                 }}
-                                onMouseLeave={() => setHoveredMember(null)}
+                                onMouseLeave={queueHideMemberTooltip}
                               >
                                 <div
                                   className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-slate-700 flex items-center justify-center text-white font-semibold text-sm overflow-hidden shrink-0"
@@ -377,29 +407,38 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
           if (!currentMember) return null
           const tipName = getMemberName(currentMember, uiLang)
           return (
-            <div
-              className="fixed z-[200] pointer-events-auto w-56 md:w-64 p-2 bg-slate-900 border border-slate-600 rounded-lg shadow-2xl"
-              style={{
-                top: tooltipPos.y,
-                left: tooltipPos.x,
-                transform: 'translate(-50%, -100%)',
-                marginTop: '-12px',
-              }}
-              onMouseEnter={() => setHoveredMember(hoveredMember)}
-              onMouseLeave={() => setHoveredMember(null)}
-            >
+            <>
+              {/* Invisible hover bridge between avatar card and tooltip card */}
+              <div
+                className="fixed z-[199] pointer-events-auto w-44 bg-transparent"
+                style={{
+                  left: tooltipPos.x,
+                  top: tooltipPos.y - 14,
+                  height: 24,
+                  transform: 'translateX(-50%)',
+                }}
+                onMouseEnter={clearHoverHideTimer}
+                onMouseLeave={queueHideMemberTooltip}
+              />
+              <div
+                className="fixed z-[200] pointer-events-auto w-56 md:w-64 rounded-lg border border-slate-600 bg-slate-900 p-2 shadow-2xl transition-opacity duration-300"
+                style={{
+                  top: tooltipPos.y,
+                  left: tooltipPos.x,
+                  transform: 'translate(-50%, -100%)',
+                  marginTop: '-12px',
+                }}
+                onMouseEnter={clearHoverHideTimer}
+                onMouseLeave={queueHideMemberTooltip}
+              >
               {debutStream ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      window.open(
-                        `https://www.youtube.com/watch?v=${debutStream.video_id}`,
-                        '_blank',
-                      )
-                    }
-                    className="w-full aspect-video rounded-md bg-slate-800 relative overflow-hidden cursor-pointer group/thumb"
-                  >
+                <a
+                  href={`https://www.youtube.com/watch?v=${debutStream.video_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/thumb block transition-opacity duration-300 hover:opacity-95"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden rounded-md bg-slate-800">
                     <img
                       src={`https://img.youtube.com/vi/${debutStream.video_id}/mqdefault.jpg`}
                       alt={debutStream.title}
@@ -417,12 +456,12 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
                         </svg>
                       </div>
                     </div>
-                  </button>
+                  </div>
                   <p className="text-xs font-bold text-slate-100 line-clamp-2 mt-2">
                     {debutStream.title}
                   </p>
                   <p className="text-[10px] text-slate-400 mt-1">{debutStream.date}</p>
-                </>
+                </a>
               ) : (
                 <>
                   <div className="aspect-video rounded-md bg-slate-800/80 flex items-center justify-center">
@@ -445,7 +484,8 @@ export function TimelineModal({ isOpen, onClose, uiLang }: TimelineModalProps) {
                 </>
               )}
               <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-6 border-x-transparent border-t-6 border-t-slate-600" />
-            </div>
+              </div>
+            </>
           )
         })()}
         </motion.div>

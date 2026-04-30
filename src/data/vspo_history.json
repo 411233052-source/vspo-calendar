@@ -56,6 +56,13 @@
     "title_zh": "成員 3D 披露目接力開始"
   },
   {
+    "date": "2023-08-11",
+    "type": "milestone",
+    "title_jp": "初オリジナル曲「for Victory!」発表",
+    "title_en": "1st Original Song \"for Victory!\" Released",
+    "title_zh": "發布首支全體原創曲「for Victory!」"
+  },
+  {
     "date": "2023-08-12",
     "type": "announcement",
     "title_jp": "VSPO! EN 及び VSPO! CN 設立",
@@ -124,5 +131,12 @@
     "title_jp": "VSPO! SHOWDOWN 2026",
     "title_en": "VSPO! SHOWDOWN 2026",
     "title_zh": "全體競技館級賽事「VSPO! SHOWDOWN 2026」"
+  },
+  {
+    "date": "2026-04-27",
+    "type": "milestone",
+    "title_jp": "橘ひなの チャンネル登録者数100万人突破",
+    "title_en": "Hinano Tachiba Reaches 1M Subscribers",
+    "title_zh": "橘ひなの 頻道訂閱數突破 100 萬 (VSPO! 史上首位)"
   }
 ]

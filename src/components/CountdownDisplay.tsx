@@ -110,7 +110,7 @@ function FlipNumber({
 
   return (
     <span
-      className={`inline-flex items-baseline justify-end tabular-nums ${numberClassName} ${groupMinWidthClass ?? ''}`}
+      className={`inline-flex w-full items-baseline justify-center text-center tabular-nums ${numberClassName} ${groupMinWidthClass ?? ''}`}
     >
       {chars.map((ch, i) => (
         <span
@@ -154,14 +154,18 @@ function CountSegment({
   groupMinWidthClass,
 }: CountSegmentProps) {
   return (
-    <div className="flex items-baseline gap-0">
-      <FlipNumber
-        value={value}
-        minDigits={minDigits}
-        numberClassName={numberClassName}
-        groupMinWidthClass={groupMinWidthClass}
-      />
-      <span className={unitClassName}>{unit}</span>
+    <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2">
+      <div className="flex w-full items-center justify-center text-center">
+        <FlipNumber
+          value={value}
+          minDigits={minDigits}
+          numberClassName={numberClassName}
+          groupMinWidthClass={groupMinWidthClass}
+        />
+      </div>
+      <div className="flex w-full items-center justify-center text-center">
+        <span className={unitClassName}>{unit}</span>
+      </div>
     </div>
   )
 }
@@ -192,16 +196,18 @@ function CountdownDisplayInner({
   const labelClass =
     'font-noto-jp mb-4 text-xs font-black uppercase tracking-[0.55em] text-white/45 md:text-sm'
   const rowClass =
-    'flex flex-wrap items-baseline justify-center gap-x-2 gap-y-3 sm:gap-x-4 md:gap-x-7 lg:gap-x-10'
+    'flex flex-wrap items-start justify-center gap-x-2 gap-y-3 sm:gap-x-4 md:gap-x-7 lg:gap-x-10'
 
   const numberClassName =
     'font-oswald text-[clamp(4.25rem,13vw,12rem)] font-bold tabular-nums leading-none tracking-[-0.05em] text-white drop-shadow-lg md:text-[clamp(6rem,11vw,12rem)]'
 
   const unitClassName =
-    'font-noto-jp ml-0.5 shrink-0 text-[clamp(0.95rem,2.1vw,1.35rem)] font-black leading-none text-white/38 md:text-[1.5rem] lg:text-[2rem]'
+    'font-noto-jp text-center text-[clamp(0.95rem,2.1vw,1.35rem)] font-black leading-none text-white/38 md:text-[1.5rem] lg:text-[2rem]'
 
   const colonClassName =
-    'font-oswald select-none px-0.5 text-[clamp(2.75rem,8.5vw,8rem)] font-light leading-none tracking-[-0.05em] text-white/22 sm:px-1'
+    'font-oswald mt-[36px] select-none text-4xl font-light leading-none tracking-[-0.03em] text-white/22 opacity-80 md:mt-[48px] md:text-5xl lg:mt-[56px] lg:text-6xl'
+  const segmentSlotClass = 'flex w-[8.5rem] items-center justify-center sm:w-[10rem] md:w-[11rem]'
+  const colonSlotClass = 'flex w-8 items-start justify-center text-center sm:w-10 md:w-12'
 
   if (format === 'dhms') {
     return (
@@ -210,47 +216,56 @@ function CountdownDisplayInner({
 
         {/* 第一排：日 : 時間 */}
         <div className={rowClass}>
-          <CountSegment
-            value={remainingDHMS.days}
-            unit={tr('countdown.days')}
-            numberClassName={numberClassName}
-            unitClassName={unitClassName}
-            groupMinWidthClass="min-w-[2.75ch] sm:min-w-[3ch]"
-          />
-          <span className={colonClassName} aria-hidden>
-            :
-          </span>
-          <CountSegment
-            value={remainingDHMS.hours}
-            unit={tr('countdown.hours')}
-            minDigits={2}
-            numberClassName={numberClassName}
-            unitClassName={unitClassName}
-            groupMinWidthClass="min-w-[2.15ch]"
-          />
+          <div className={segmentSlotClass}>
+            <CountSegment
+              value={remainingDHMS.days}
+              unit={tr('countdown.days')}
+              minDigits={2}
+              numberClassName={numberClassName}
+              unitClassName={unitClassName}
+              groupMinWidthClass="min-w-[2.75ch] sm:min-w-[3ch]"
+            />
+          </div>
+          <div className={colonSlotClass} aria-hidden>
+            <span className={colonClassName}>:</span>
+          </div>
+          <div className={segmentSlotClass}>
+            <CountSegment
+              value={remainingDHMS.hours}
+              unit={tr('countdown.hours')}
+              minDigits={2}
+              numberClassName={numberClassName}
+              unitClassName={unitClassName}
+              groupMinWidthClass="min-w-[2.15ch]"
+            />
+          </div>
         </div>
 
         {/* 第二排：分 : 秒 */}
         <div className={`${rowClass} mt-3 sm:mt-5`}>
-          <CountSegment
-            value={remainingDHMS.minutes}
-            unit={tr('countdown.mins')}
-            minDigits={2}
-            numberClassName={numberClassName}
-            unitClassName={unitClassName}
-            groupMinWidthClass="min-w-[2.15ch]"
-          />
-          <span className={colonClassName} aria-hidden>
-            :
-          </span>
-          <CountSegment
-            value={remainingDHMS.seconds}
-            unit={tr('countdown.secs')}
-            minDigits={2}
-            numberClassName={numberClassName}
-            unitClassName={unitClassName}
-            groupMinWidthClass="min-w-[2.15ch]"
-          />
+          <div className={segmentSlotClass}>
+            <CountSegment
+              value={remainingDHMS.minutes}
+              unit={tr('countdown.mins')}
+              minDigits={2}
+              numberClassName={numberClassName}
+              unitClassName={unitClassName}
+              groupMinWidthClass="min-w-[2.15ch]"
+            />
+          </div>
+          <div className={colonSlotClass} aria-hidden>
+            <span className={colonClassName}>:</span>
+          </div>
+          <div className={segmentSlotClass}>
+            <CountSegment
+              value={remainingDHMS.seconds}
+              unit={tr('countdown.secs')}
+              minDigits={2}
+              numberClassName={numberClassName}
+              unitClassName={unitClassName}
+              groupMinWidthClass="min-w-[2.15ch]"
+            />
+          </div>
         </div>
 
         <div className={`${labelClass} mt-4`}>{tr('countdown.until')}</div>
@@ -265,45 +280,56 @@ function CountdownDisplayInner({
 
       {/* 第一排：月 : 週 */}
       <div className={rowClass}>
-        <CountSegment
-          value={remainingMWDH.months}
-          unit={tr('countdown.month')}
-          numberClassName={numberClassName}
-          unitClassName={unitClassName}
-          groupMinWidthClass="min-w-[2.25ch]"
-        />
-        <span className={colonClassName} aria-hidden>
-          :
-        </span>
-        <CountSegment
-          value={remainingMWDH.weeks}
-          unit={tr('countdown.week')}
-          numberClassName={numberClassName}
-          unitClassName={unitClassName}
-          groupMinWidthClass="min-w-[2.25ch]"
-        />
+        <div className={segmentSlotClass}>
+          <CountSegment
+            value={remainingMWDH.months}
+            unit={tr('countdown.month')}
+            minDigits={2}
+            numberClassName={numberClassName}
+            unitClassName={unitClassName}
+            groupMinWidthClass="min-w-[2.25ch]"
+          />
+        </div>
+        <div className={colonSlotClass} aria-hidden>
+          <span className={colonClassName}>:</span>
+        </div>
+        <div className={segmentSlotClass}>
+          <CountSegment
+            value={remainingMWDH.weeks}
+            unit={tr('countdown.week')}
+            minDigits={2}
+            numberClassName={numberClassName}
+            unitClassName={unitClassName}
+            groupMinWidthClass="min-w-[2.25ch]"
+          />
+        </div>
       </div>
 
       {/* 第二排：日 : 時間 */}
       <div className={`${rowClass} mt-3 sm:mt-5`}>
-        <CountSegment
-          value={remainingMWDH.days}
-          unit={tr('countdown.days')}
-          numberClassName={numberClassName}
-          unitClassName={unitClassName}
-          groupMinWidthClass="min-w-[2.25ch]"
-        />
-        <span className={colonClassName} aria-hidden>
-          :
-        </span>
-        <CountSegment
-          value={remainingMWDH.hours}
-          unit={tr('countdown.hours')}
-          minDigits={2}
-          numberClassName={numberClassName}
-          unitClassName={unitClassName}
-          groupMinWidthClass="min-w-[2.15ch]"
-        />
+        <div className={segmentSlotClass}>
+          <CountSegment
+            value={remainingMWDH.days}
+            unit={tr('countdown.days')}
+            minDigits={2}
+            numberClassName={numberClassName}
+            unitClassName={unitClassName}
+            groupMinWidthClass="min-w-[2.25ch]"
+          />
+        </div>
+        <div className={colonSlotClass} aria-hidden>
+          <span className={colonClassName}>:</span>
+        </div>
+        <div className={segmentSlotClass}>
+          <CountSegment
+            value={remainingMWDH.hours}
+            unit={tr('countdown.hours')}
+            minDigits={2}
+            numberClassName={numberClassName}
+            unitClassName={unitClassName}
+            groupMinWidthClass="min-w-[2.15ch]"
+          />
+        </div>
       </div>
 
       <div className={`${labelClass} mt-4`}>{tr('countdown.until')}</div>

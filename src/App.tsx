@@ -666,7 +666,7 @@ function App() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30 transition-opacity duration-500 ease-in-out" />
         </div>
 
-        <main className="relative z-20 flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-6 text-white">
+        <main className="relative z-20 flex min-h-0 w-full flex-1 flex-col items-center justify-center bg-transparent px-6 pb-24 md:pb-28 text-white">
         <div
           className={`fixed right-3 top-3 z-[62] transition-opacity duration-500 md:right-5 md:top-4 ${immersiveHidden}`}
           ref={settingsPanelRef}
